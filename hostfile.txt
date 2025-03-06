@@ -1,0 +1,2 @@
+# name<TAB>`IP or hostname`
+host01 <hostname>

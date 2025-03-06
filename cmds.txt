@@ -1,0 +1,3 @@
+# cmd name<TAB>raw cmd
+nvidia_smi_q	nvidia-smi -q
+vmstat	vmstat
