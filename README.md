@@ -1,12 +1,12 @@
-## plog
+# plog
 Plog is a command-line utility that executes commands on multiple remote hosts concurrently using SSH. It reads a list of hosts and commands from specified files, runs the commands in parallel, and saves the output logs in a structured directory.
 
-### Usage
+## Usage
 ```
 python3 plog.py --host <host file> --cmds <cmds file> --nproc <number of processes> --output_dir <output_dir>
 ```
 
-### Parameters
+## Parameters
 * host file:  
   A text file containing the list of hosts. Each line should include an optional label and the corresponding hostname or IP address, separated by a TAB. The program will SSH into each host listed in this file.
 
@@ -22,7 +22,7 @@ python3 plog.py --host <host file> --cmds <cmds file> --nproc <number of process
   <hostname>/<command label>_<execution time>.txt
   ```
 
-### Additional Requirements
+## Additional Requirements
 Make sure to install the required Python packages before running the script:
 ```
 pip3 install joblib paramiko
