@@ -1,3 +1,7 @@
+<p align="center">
+<img src="images/logo.png" width="800px">
+</p>
+
 # plog
 Plog is a command-line utility that executes commands on multiple remote hosts concurrently using SSH. It reads a list of hosts and commands from specified files, runs the commands in parallel, and saves the output logs in a structured directory.
 
