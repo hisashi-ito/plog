@@ -21,3 +21,9 @@ python3 plog.py --host <host file> --cmds <cmds file> --nproc <number of process
   ```text
   <hostname>/<command label>_<execution time>.txt
   ```
+
+### Additional Requirements
+Make sure to install the required Python packages before running the script:
+```
+pip3 install joblib paramiko
+```
