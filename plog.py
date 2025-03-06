@@ -1,25 +1,30 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 #【plog】
 #
-# 概要:
-#      python のjoblib を使って`hostfile`で指定されたホストに`ssh`を実施し
-#      cmdsファイルで指定されたコマンドを実行し、実行結果をメインプロセス側に戻し
-#      所定のディレクトリにコマンドの実行結果を保存する
+# Overview:
+#      This script uses Python's joblib to perform SSH on hosts specified in the `hostfile`
+#      and execute commands listed in the cmds file. It retrieves the execution results back
+#      to the main process and saves them in a designated directory.
 #
 # usage:
 #      python3 plog.py --host <host file>
 #                      --cmds <cmds file>
-#                      --nproc <number of process>
+#                      --nproc <number of processes>
 #                      --output_dir <output_dir>
 #
-#     hostfile: ホストファイル,ホストの名前(任意)<TAB>hostname or IP を複数行で書く
-#               ホストファイルに指定された分だけsshを実施する
-#     cmds: ssh 先で実施するコマンド。こちらもコマンド名(任意)<TAB>cmd で書く
-#     nproc: joblibで実行時の同時並列数
-#     output_dir: 実行結果を保存するディレクトリパス
-#                 各cmd の結果は `ホスト名/コマンド名_実行時刻.txt` で出力することにするぞい
+#     hostfile: A file containing hosts. Each line should be formatted as:
+#               "Optional host name<TAB>hostname or IP". An SSH connection will be
+#               executed for each entry specified in the hostfile.
+#
+#     cmds: The commands to be executed via SSH on the remote hosts. Each line should be
+#           formatted as "Optional command name<TAB>command".
+#
+#     nproc: The number of parallel processes to use with joblib.
+#
+#     output_dir: The directory path where the execution results will be saved.
+#                 Each command's result will be output as
+#                 `hostname/commandname_executiontime.txt`.
 #      
 import os
 import sys
@@ -63,7 +68,6 @@ def exec_cmd(cmd, host, timeout=30):
         if error.strip():
             ret["stderr"] = error.strip
         else:
-            # 正常な結果を保存(raw なtext)
             ret["stdout"] = output
                         
     except (paramiko.ssh_exception.SSHException, paramiko.ssh_exception.AuthenticationException, socket.timeout) as e:
@@ -88,8 +92,6 @@ def load_hostfile(input):
     return hosts
 
 def load_cmds(input):
-    # 実行するコマンドをファイルで設定する
-    # コマンドラインでいれるとめんどくさい
     cmds= []
     with open(input, mode="r", encoding="utf-8") as fin:
         for line in fin:
@@ -115,20 +117,17 @@ def main():
     parser.add_argument('--output_dir', type=str)
     
     args = parser.parse_args()
-        
-    hosts = load_hostfile(args.host)  # ssh するホストファイルを設定
+
+    # define hosts
+    hosts = load_hostfile(args.host)
     nproc = args.nproc
     cmds = load_cmds(args.cmds)
     output_dir = args.output_dir
-
-    print(hosts)
-    print(cmds)
     
-    
-    # 実行時間
+    # start time
     time_str = datetime.now().strftime("%Y%m%d_%H%M")
 
-    # 実行コマンドは直列で、実行ホストを並列化
+    # The commands are executed sequentially, while the execution across hosts is parallelized.
     for cmd in cmds:
         rets = Parallel(n_jobs=nproc, backend="threading")(delayed(exec_cmd)(cmd, host) for host in hosts)
         rets = sorted(rets, key=lambda d: d["host"])
