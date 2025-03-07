@@ -12,20 +12,27 @@
 #                      --cmds <cmds file>
 #                      --nproc <number of processes>
 #                      --output_dir <output_dir>
+#     hostfile:
+#       A file containing hosts. Each line should be formatted as:
+#       ```
+#        Optional host name<TAB>hostname or IP
+#        ```
+#        An SSH connection will be executed for each entry specified in the hostfile.
 #
-#     hostfile: A file containing hosts. Each line should be formatted as:
-#               "Optional host name<TAB>hostname or IP". An SSH connection will be
-#               executed for each entry specified in the hostfile.
+#     cmds:
+#       The commands to be executed via SSH on the remote hosts. Each line should be
+#       formatted as "Optional command name<TAB>command".
 #
-#     cmds: The commands to be executed via SSH on the remote hosts. Each line should be
-#           formatted as "Optional command name<TAB>command".
+#     nproc:
+#       The number of parallel processes to use with joblib.
 #
-#     nproc: The number of parallel processes to use with joblib.
+#     output_dir:
+#       The directory path where the execution results will be saved.
+#       Each command's result will be output as
+#       ```
+#       hostname/commandname_executiontime.txt
+#       ```
 #
-#     output_dir: The directory path where the execution results will be saved.
-#                 Each command's result will be output as
-#                 `hostname/commandname_executiontime.txt`.
-#      
 import os
 import sys
 import re
