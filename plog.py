@@ -118,8 +118,8 @@ def dump(file, output):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--host', type=str, default=None)
-    parser.add_argument('--cmds', type=str, default=None)
+    parser.add_argument('--host', type=str)
+    parser.add_argument('--cmds', type=str)
     parser.add_argument('--nproc', type=int, default=4)
     parser.add_argument('--output_dir', type=str)
     
